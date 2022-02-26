@@ -1,8 +1,6 @@
-import { useDrop } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 import { FormAreaWrapper } from "./FormArea.styles";
 import { FormAreaItem, FormAreaProps } from "./FormArea.types";
-import { nanoid } from "nanoid";
-import { useCallback, useRef, useState } from "react";
 import ShortText from "./elements/ShortText";
 import {
   CheckboxAttributes,
@@ -13,10 +11,12 @@ import Checkbox from "./elements/Checkbox";
 
 const FormArea = (props: FormAreaProps) => {
   const [, drop] = useDrop(() => ({
-    accept: "form-element",
-    drop: (item: FormAreaItem<ElementAttributes>) => {
-      props.onDrop(item);
-    },
+    accept: ["form-element", "form-area-element"],
+    drop: (item: FormAreaItem<ElementAttributes>, monitor) => {
+      if (item.index === undefined) {
+        props.onDrop(item);
+      }
+    }
   }));
 
   return (
@@ -36,7 +36,9 @@ const FormArea = (props: FormAreaProps) => {
               <ShortText
                 key={index}
                 {...item}
+                index={index}
                 numbering={index + 1}
+                moveCard={props.moveCard}
                 onDelete={() => props.onItemDelete(item)}
                 onQuestionTextChanged={(questionText) =>
                   props.onQuestionTextChange(item, questionText)

@@ -1,13 +1,29 @@
+import { useDrag } from "react-dnd";
 import { CheckboxAttributes } from "../../element-bank/ElementBank.types";
 import Question from "../../Question";
 import { FormElementStyle } from "../FormArea.styles";
 import { FormAreaItem } from "../FormArea.types";
 
-interface CheckboxProps extends FormAreaItem<CheckboxAttributes> {}
+interface CheckboxProps extends FormAreaItem<CheckboxAttributes> { }
 
 const Checkbox = (props: CheckboxProps) => {
+  const [{ isDragging }, dragRef] = useDrag(
+    () => ({
+      type: "form-area-element-1",
+      collect: (monitor) => {
+        return {
+          isDragging: monitor.isDragging() ? 0.5 : 1,
+        };
+      },
+    }),
+    []
+  );
   return (
-    <FormElementStyle onClick={() => props.onQuestionSelected()} isSelected={props.isSelected}>
+    <FormElementStyle onClick={() => props.onQuestionSelected()} isSelected={props.isSelected}
+      ref={dragRef} style={{
+        opacity: !isDragging ? 0.5 : 1,
+        cursor: "move",
+      }}>
       <Question
         numbering={props.numbering}
         question={props.question}

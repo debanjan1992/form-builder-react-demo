@@ -11,7 +11,6 @@ const ElementProperties = (props: ElementPropertiesProps) => {
       ? props.selectedItem.attributes.styling.fontBackground
       : ""
   );
-  console.log(fontColor, fontBackground, props.selectedItem);
 
   useEffect(() => {
     if (props.selectedItem !== null) {
@@ -32,7 +31,6 @@ const ElementProperties = (props: ElementPropertiesProps) => {
           type="color"
           value={fontColor}
           onChange={(e) => {
-            console.log(e);
             setFontColor(e.target.value);
             if (props.selectedItem !== null) {
               props.selectedItem.attributes.styling.fontColor = e.target.value;
@@ -47,7 +45,6 @@ const ElementProperties = (props: ElementPropertiesProps) => {
           type="color"
           value={fontBackground}
           onChange={(e) => {
-            console.log(e);
             setFontBackground(e.target.value);
             if (props.selectedItem !== null) {
               props.selectedItem.attributes.styling.fontBackground =

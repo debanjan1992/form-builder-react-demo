@@ -6,7 +6,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FormAreaItem } from "../../components/form-area/FormArea.types";
 import { ElementAttributes } from "../../components/element-bank/ElementBank.types";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import {
   FORM_ITEMS_SESSION_KEY,
@@ -72,11 +72,21 @@ const FormBuilder = () => {
       return [...oldArray];
     });
   };
+
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
+    const items: any[] = JSON.parse(JSON.stringify(formAreaItems));
+    const itemToMove = items[dragIndex];
+    items.splice(dragIndex, 1);
+    items.splice(hoverIndex, 0, itemToMove);
+    setFormAreaItems(items);
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <FormBuilderWrapper>
         <ElementBank />
         <FormArea
+          moveCard={moveCard}
           items={formAreaItems}
           onDrop={onFormAreaDrop}
           onItemDelete={onElementDelete}
